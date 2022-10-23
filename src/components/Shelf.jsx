@@ -3,26 +3,23 @@ import Book from './Book';
 
 const Shelf = (props) => {
 
-    const [query, setQuery] = useState("");
-
-    useEffect(() => {
-
-    }, []);
+    const { shelfName, shelfType, books, onUpdateBook } = props;
 
     const showingBooks =
-        props.books.filter((book) =>
-            book.shelf == props.shelfType
+        books.filter((book) =>
+            book.shelf == shelfType
         );
 
     return (
         <div className="bookshelf">
-            <h2 className="bookshelf-title">{props.shelfName}</h2>
+            <h2 className="bookshelf-title">{shelfName}</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     {showingBooks.map((bookItem) => (
                         <Book
                             key={bookItem.id}
-                            bookItem={bookItem} />
+                            bookItem={bookItem}
+                            onUpdateBook={onUpdateBook} />
                     ))}
 
                 </ol>

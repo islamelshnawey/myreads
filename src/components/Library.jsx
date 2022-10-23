@@ -8,13 +8,29 @@ const Library = () => {
     const [books, setBooks] = useState([]);
 
     useEffect(() => {
-        const getBooks = async () => {
-            const res = await BooksAPI.getAll();
-            setBooks(res);
-        };
-
         getBooks();
     }, []);
+
+    /**
+     * func to fetch books
+     */
+    const getBooks = async () => {
+        const res = await BooksAPI.getAll();
+        setBooks(res);
+    };
+
+    /**
+     * func to change book shelf
+     * @param {*} book book Item
+     * @param {*} shelf desired Shelf
+     */
+    const updateBook = async (book, shelf) => {
+        const res = await BooksAPI.update(book, shelf);
+        if (res) {
+            console.log(res);
+            getBooks();
+        }
+    };
 
     return (
         <div className="list-books">
@@ -25,16 +41,19 @@ const Library = () => {
                 shelfName='Currently Reading'
                 shelfType={Constants.BOOK_SHELFS.CURRENTLY_READ}
                 books={books}
+                onUpdateBook={updateBook}
             />
             <Shelf
                 shelfName='Want to Read'
                 shelfType={Constants.BOOK_SHELFS.WANT_TO_READ}
                 books={books}
+                onUpdateBook={updateBook}
             />
             <Shelf
                 shelfName='Read'
                 shelfType={Constants.BOOK_SHELFS.READ}
                 books={books}
+                onUpdateBook={updateBook}
             />
         </div>
     );
