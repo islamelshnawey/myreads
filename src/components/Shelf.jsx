@@ -10,11 +10,9 @@ const Shelf = (props) => {
     }, []);
 
     const showingBooks =
-        query === ""
-            ? props.books
-            : props.books.filter((c) =>
-                c.name.toLowerCase().includes(query.toLowerCase())
-            );
+        props.books.filter((book) =>
+            book.shelf == props.shelfType
+        );
 
     return (
         <div className="bookshelf">
