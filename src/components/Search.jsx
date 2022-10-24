@@ -3,10 +3,9 @@ import Book from './Book';
 import React, { useEffect, useState } from 'react';
 import * as BooksAPI from "../api/BooksAPI";
 
-const Search = (props) => {
+const Search = () => {
 
     const [books, setBooks] = useState([]);
-    const { onSearchBook, onUpdateBook } = props;
     const [query, setQuery] = useState("");
 
     const updateQuery = (value) => {
@@ -15,29 +14,28 @@ const Search = (props) => {
         searchAbook(value.trim(), 20);
     };
 
-    const clearQuery = () => {
-        updateQuery("");
-    };
-
     /**
     * func to search for book 
     *  @param {*} query query
     */
     const searchAbook = async (query, maxResults) => {
-        // const res = await BooksAPI.search(query, maxResults);
+
+        if (query.length < 1) {
+            return;
+        }
 
         await BooksAPI.search(query, maxResults)
             .then((result) => {
                 if (result.error) {
-
-                } else {
-                    if (result) {
-                        console.log(result);
-                        const filterdBooks = result.filter((book) =>
-                            book.imageLinks !== undefined
-                        );
-                        setBooks(filterdBooks);
-                    }
+                    setBooks([]);
+                    return;
+                }
+                if (result) {
+                    console.log(result);
+                    const filterdBooks = result.filter((book) =>
+                        book.imageLinks !== undefined
+                    );
+                    setBooks(filterdBooks);
                 }
             })
             .catch((err) => {
@@ -45,11 +43,23 @@ const Search = (props) => {
             })
     };
 
+    /**
+    * func to change book shelf
+    * @param {*} book book Item
+    * @param {*} shelf desired Shelf
+    */
+    const updateBook = async (book, shelf) => {
+        const res = await BooksAPI.update(book, shelf);
+        if (res) {
+            console.log(res);
+        }
+    };
+
     return (
         <div >
             <div className="search-books-bar">
                 <Link to="/" className="close-search">
-                    <a>Close</a>
+                    Close
                 </Link>
                 <div className="search-books-input-wrapper">
                     <input
@@ -63,12 +73,12 @@ const Search = (props) => {
             <div className="search-books-results">
                 <ol className="books-grid">
 
-                    {books ? (
+                    {books.length > 0 ? (
                         books.map((bookItem) => (
                             <Book
                                 key={bookItem.id}
                                 bookItem={bookItem}
-                                onUpdateBook={onUpdateBook} />
+                                onUpdateBook={updateBook} />
                         ))
 
                     ) : (

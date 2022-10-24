@@ -124,6 +124,7 @@ body,
 
 .book {
   width: 140px;
+  margin: 8px;
 }
 .book-title,
 .book-authors {

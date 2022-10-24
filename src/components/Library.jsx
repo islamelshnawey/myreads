@@ -4,22 +4,33 @@ import Shelf from './Shelf';
 import * as Constants from "../utils/Constants";
 import { Link } from 'react-router-dom';
 
-const Library = (props) => {
+const Library = () => {
 
-    const { onUpdateBook } = props;
     const [books, setBooks] = useState([]);
-    const [searchedBooks, setSearchedBooks] = useState([]);
-  
+
     useEffect(() => {
-      getBooks();
+        getBooks();
     }, []);
-  
+
     /**
      * func to fetch books
      */
     const getBooks = async () => {
-      const res = await BooksAPI.getAll();
-      setBooks(res);
+        const res = await BooksAPI.getAll();
+        setBooks(res);
+    };
+
+    /**
+     * func to change book shelf
+     * @param {*} book book Item
+     * @param {*} shelf desired Shelf
+     */
+    const updateBook = async (book, shelf) => {
+        const res = await BooksAPI.update(book, shelf);
+        if (res) {
+            console.log(res);
+            getBooks();
+        }
     };
 
     return (
@@ -32,24 +43,24 @@ const Library = (props) => {
                     shelfName='Currently Reading'
                     shelfType={Constants.BOOK_SHELFS.CURRENTLY_READ}
                     books={books}
-                    onUpdateBook={onUpdateBook}
+                    onUpdateBook={updateBook}
                 />
                 <Shelf
                     shelfName='Want to Read'
                     shelfType={Constants.BOOK_SHELFS.WANT_TO_READ}
                     books={books}
-                    onUpdateBook={onUpdateBook}
+                    onUpdateBook={updateBook}
                 />
                 <Shelf
                     shelfName='Read'
                     shelfType={Constants.BOOK_SHELFS.READ}
                     books={books}
-                    onUpdateBook={onUpdateBook}
+                    onUpdateBook={updateBook}
                 />
             </div>
             <div className="open-search">
                 <Link to="/search" className="add-contact">
-                    <a>Search book</a>
+                    Search book
                 </Link>
             </div>
         </div>
