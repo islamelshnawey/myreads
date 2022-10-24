@@ -40,7 +40,7 @@ const Book = (props) => {
                 ></div>
                 <div className="book-shelf-changer">
                     <select
-                        defaultValue={bookItem.shelf}
+                        defaultValue={bookItem.shelf ? bookItem.shelf : 'none'}
                         onChange={event => onChangeOption(event.target.options.selectedIndex)}>
                         <option value="none" disabled>
                             Move to...
@@ -62,11 +62,17 @@ const Book = (props) => {
             </div>
             <div className="book-title">{bookItem.title}</div>
             {
-                bookItem.authors.map((author, index) => (
-                    <div
-                        key={index}
-                        className="book-authors">{author}</div>
-                ))
+                bookItem.authors ? (
+                    bookItem.authors.map((author, index) => (
+                        <div
+                            key={index}
+                            className="book-authors">{author}</div>
+                    ))
+
+                ) : (
+                    <div className="book-authors">No author avaliable</div>
+                )
+
             }
         </div >
     );
