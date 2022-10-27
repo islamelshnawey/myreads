@@ -40,9 +40,9 @@ const Book = (props) => {
                 ></div>
                 <div className="book-shelf-changer">
                     <select
-                        defaultValue={bookItem.shelf ? bookItem.shelf : 'none'}
+                        defaultValue={bookItem.shelf !== undefined ? bookItem.shelf : 'none'}
                         onChange={event => onChangeOption(event.target.options.selectedIndex)}>
-                        <option value="none" disabled>
+                        <option disabled>
                             Move to...
                         </option>
                         <option value="currentlyReading">

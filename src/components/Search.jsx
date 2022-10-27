@@ -3,14 +3,16 @@ import Book from './Book';
 import React, { useEffect, useState } from 'react';
 import * as BooksAPI from "../api/BooksAPI";
 
-const Search = () => {
+const Search = (props) => {
+
+    const { myBooks , updateBook } = props;
 
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState("");
 
     const updateQuery = (value) => {
         console.log(value);
-        setQuery(value.trim());
+        setQuery(value);
         searchAbook(value.trim(), 20);
     };
 
@@ -19,8 +21,10 @@ const Search = () => {
     *  @param {*} query query
     */
     const searchAbook = async (query, maxResults) => {
+        // console.log(myBooks);
 
         if (query.length < 1) {
+            setBooks([]);
             return;
         }
 
@@ -33,26 +37,22 @@ const Search = () => {
                 if (result) {
                     console.log(result);
                     const filterdBooks = result.filter((book) =>
-                        book.imageLinks !== undefined
+                        book.imageLinks !== undefined 
+                        && 
+                        myBooks.map((myBook)=>{
+                           if (myBook.id == book.id) {
+                            book.shelf = myBook.shelf;
+                            }
+                        })
                     );
-                    setBooks(filterdBooks);
+
+                    setBooks(filterdBooks );
+
                 }
             })
             .catch((err) => {
                 console.log(err)
             })
-    };
-
-    /**
-    * func to change book shelf
-    * @param {*} book book Item
-    * @param {*} shelf desired Shelf
-    */
-    const updateBook = async (book, shelf) => {
-        const res = await BooksAPI.update(book, shelf);
-        if (res) {
-            console.log(res);
-        }
     };
 
     return (

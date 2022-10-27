@@ -1,37 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import * as BooksAPI from "../api/BooksAPI";
+import React from 'react';
 import Shelf from './Shelf';
 import * as Constants from "../utils/Constants";
 import { Link } from 'react-router-dom';
 
-const Library = () => {
+const Library = (props) => {
 
-    const [books, setBooks] = useState([]);
-
-    useEffect(() => {
-        getBooks();
-    }, []);
-
-    /**
-     * func to fetch books
-     */
-    const getBooks = async () => {
-        const res = await BooksAPI.getAll();
-        setBooks(res);
-    };
-
-    /**
-     * func to change book shelf
-     * @param {*} book book Item
-     * @param {*} shelf desired Shelf
-     */
-    const updateBook = async (book, shelf) => {
-        const res = await BooksAPI.update(book, shelf);
-        if (res) {
-            console.log(res);
-            getBooks();
-        }
-    };
+    const { books, updateBook } = props;
 
     return (
         <div>
