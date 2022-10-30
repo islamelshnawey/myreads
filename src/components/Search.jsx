@@ -13,7 +13,7 @@ const Search = (props) => {
     const updateQuery = (value) => {
         console.log(value);
         setQuery(value);
-        searchAbook(value.trim(), 20);
+        searchAbook(value, 20);
     };
 
     /**
